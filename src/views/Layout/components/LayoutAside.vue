@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  Document,
-  Menu as IconMenu,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  Location,
-  Setting
-} from '@element-plus/icons-vue'
+import { Document, Location, Menu as IconMenu, Setting } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
@@ -20,10 +16,11 @@ const handleClose = (key: string, keyPath: string[]) => {
   <el-row class="tac">
     <el-col :span="12">
       <el-menu
+        style="width: 200px;"
         active-text-color="#ffd04b"
         background-color="#545c64"
         class="el-menu-vertical-demo"
-        default-active="2"
+        default-active="0"
         text-color="#fff"
         @open="handleOpen"
         @close="handleClose"
@@ -33,7 +30,7 @@ const handleClose = (key: string, keyPath: string[]) => {
             <el-icon>
               <location/>
             </el-icon>
-            <span>Navigator One</span>
+            <span>test</span>
           </template>
           <el-menu-item-group title="Group One">
             <el-menu-item index="1-1">item one</el-menu-item>
@@ -47,11 +44,11 @@ const handleClose = (key: string, keyPath: string[]) => {
             <el-menu-item index="1-4-1">item one</el-menu-item>
           </el-sub-menu>
         </el-sub-menu>
-        <el-menu-item index="2" disabled>
+        <el-menu-item index="2" @click="()=>router.push('/hr')">
           <el-icon>
             <icon-menu/>
           </el-icon>
-          <span>Navigator Two</span>
+          <span>员工管理</span>
         </el-menu-item>
         <el-menu-item index="3" disabled>
           <el-icon>

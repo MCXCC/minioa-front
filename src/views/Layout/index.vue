@@ -12,7 +12,7 @@ import LayoutAside from '@/views/Layout/components/LayoutAside.vue'
       </el-header>
       <el-container>
 <!--        侧栏-->
-        <el-aside width="400px">
+        <el-aside width="200px">
           <LayoutAside/>
         </el-aside>
 <!--        主要内容-->
