@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import router from '@/router'
 
 const activeIndex = ref('1')
 // 是否登录
@@ -35,9 +36,9 @@ const handleSelect = (key: string, keyPath: string[]) => {
       <el-menu-item index="2-1">接触网状态快速分析工具</el-menu-item>
       <el-menu-item index="2-2" disabled>item two</el-menu-item>
       <el-menu-item index="2-3" disabled>item three</el-menu-item>
-      <el-sub-menu index="2-4" disabled>
-        <template #title>item four</template>
-        <el-menu-item index="2-4-1">item one</el-menu-item>
+      <el-sub-menu index="2-4">
+        <template #title>开发测试</template>
+        <el-menu-item index="2-4-1" @click="()=>{router.push('/test')}">接口测试</el-menu-item>
         <el-menu-item index="2-4-2">item two</el-menu-item>
         <el-menu-item index="2-4-3">item three</el-menu-item>
       </el-sub-menu>

@@ -19,7 +19,7 @@ module.exports = {
     proxy: {
       '/json_demo': {
         // 跨域的服务器地址
-        target: 'http://192.168.1.4:5000',
+        target: 'http://127.0.0.1:5000',
         // 是否允许跨域
         changeOrigin: true,
         // 替换掉请求路径的/json_demo“”

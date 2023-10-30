@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { loginAPIs } from '@/apis/user'
+import { loginAPI } from '@/apis/user'
 
 const login = async () => {
   console.log('登录请求')
-  const res = await loginAPIs({ workNumber: 'D00001', password: '12345678' })
+  const res = await loginAPI({ workNumber: 'D00001', password: '12345678' })
   console.dir(res.message)
 }
 </script>
