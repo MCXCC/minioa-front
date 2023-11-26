@@ -14,7 +14,7 @@ const handleClose = (key: string, keyPath: string[]) => {
 
 <template>
   <el-row class="tac">
-    <el-col :span="12">
+    <el-col :span="24">
       <el-menu
         style="width: 200px;"
         active-text-color="#ffd04b"
@@ -50,7 +50,7 @@ const handleClose = (key: string, keyPath: string[]) => {
           </el-icon>
           <span>员工管理</span>
         </el-menu-item>
-        <el-menu-item index="3" disabled>
+        <el-menu-item @click="()=>router.push('/manage')" index="3">
           <el-icon>
             <document/>
           </el-icon>
