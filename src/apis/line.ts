@@ -4,25 +4,31 @@ import { lineItem } from '@/types/default'
 
 export const lineAPI = () => {
   const query = () => {
-    return http<lineItem>({
+    return http<[lineItem]>({
       url: '/line',
-      method: 'PUT',
-      headers: {
-        token: '123456'
-      }
+      method: 'GET'
     })
   }
 
-  const add = () => {
+  const add = (lineData:lineItem) => {
     return http({
       url: '/line',
-      method: 'POST'
-      // data: {}
+      method: 'POST',
+      data: lineData
+    })
+  }
+
+  const del = (id: number) => {
+    return http({
+      url: '/line',
+      method: 'DELETE',
+      params: { id: id }
     })
   }
 
   return {
     query,
-    add
+    add,
+    del
   }
 }

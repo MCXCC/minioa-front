@@ -3,10 +3,9 @@ import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 import { useUserStore } from '@/stores/userStore'
 import { useRouter } from 'vue-router'
-import { Config } from '@/config'
 
 export const httpInstance = axios.create({
-  baseURL: 'http://' + Config.BACKEND_HOST + ':' + Config.BACKEND_PORT,
+  baseURL: 'http://[2409:8a34:2060:faf0:5554:e843:39ee:3430]:5531',
   timeout: 5000
 })
 
@@ -25,7 +24,7 @@ httpInstance.interceptors.response.use(
   error => {
     const userStore = useUserStore()
     const router = useRouter()
-    console.log('66')
+    console.log(error)
     ElMessage({
       type: 'warning',
       message: error.response.data.message
@@ -39,10 +38,10 @@ httpInstance.interceptors.response.use(
 )
 
 // 默认返回类型
-type Data<T>={
-  code:string,
-  message:string,
-  data:T
+type Data<T> = {
+  code: string,
+  msg: string,
+  data: T
 }
 
 export const http = <T>(config: AxiosRequestConfig<any>) => {
