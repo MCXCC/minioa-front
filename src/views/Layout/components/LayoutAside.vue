@@ -44,7 +44,7 @@ const handleClose = (key: string, keyPath: string[]) => {
             <el-menu-item index="1-4-1">item one</el-menu-item>
           </el-sub-menu>
         </el-sub-menu>
-        <el-menu-item index="2" @click="()=>router.push('/hr')">
+        <el-menu-item disabled index="2" @click="()=>router.push('/hr')">
           <el-icon>
             <icon-menu/>
           </el-icon>
@@ -54,7 +54,7 @@ const handleClose = (key: string, keyPath: string[]) => {
           <el-icon>
             <document/>
           </el-icon>
-          <span>Navigator Three</span>
+          <span>架构管理</span>
         </el-menu-item>
         <el-menu-item index="4" disabled>
           <el-icon>

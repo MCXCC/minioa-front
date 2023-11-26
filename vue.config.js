@@ -9,7 +9,7 @@ module.exports = {
       alias: {
         assets: '@/assets',
         common: '@/common',
-        components: '@/components',
+        components: '@/LineManage',
         network: '@/network',
         views: '@/views'
       }

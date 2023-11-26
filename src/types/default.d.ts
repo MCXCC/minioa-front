@@ -9,3 +9,10 @@ export type lineItem = {
   createTime: Date,
   updateTime: Date,
 }
+
+export type departmentItem = {
+  id: number,
+  title: string,
+  createTime: Date,
+  updateTime: Date,
+}

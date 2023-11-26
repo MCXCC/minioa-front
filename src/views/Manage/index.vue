@@ -2,14 +2,15 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-const activeIndex = ref('3')
+const activeIndex = ref('1')
 const handleSelect = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }
 const router = useRouter()
 
 onMounted(() => {
-  router.push('/line')
+  setTimeout(() => { return 0 }, 10)
+  router.push('/manage/department')
 })
 </script>
 
@@ -21,9 +22,10 @@ onMounted(() => {
     @select="handleSelect"
     background-color="#F3F3F3FF"
     router="router">
-    <el-menu-item index="1">Processing Center</el-menu-item>
-    <el-menu-item index="2">Info</el-menu-item>
-    <el-menu-item index="3" route="/line">线路管理</el-menu-item>
+    <el-menu-item index="1" route="/manage/department">部门管理</el-menu-item>
+    <el-menu-item index="2" route="/manage/line">线路管理</el-menu-item>
+    <el-menu-item index="3" disabled>岗位管理</el-menu-item>
+    <el-menu-item index="4" disabled>专业管理</el-menu-item>
   </el-menu>
   <RouterView/>
 </template>

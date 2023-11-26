@@ -4,7 +4,8 @@ import Home from '@/views/Home/index.vue'
 import Login from '@/views/Login/index.vue'
 import Test from '@/views/Test/index.vue'
 import Manage from '@/views/Manage/index.vue'
-import LineManage from '@/views/Manage/components/LineManage.vue'
+import LineManage from '@/views/Manage/LineManage/index.vue'
+import DepartmentManage from '@/views/Manage/DepartmentManage/index.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -20,8 +21,12 @@ const routes: Array<RouteRecordRaw> = [
         component: Manage,
         children: [
           {
-            path: '/line',
+            path: '/manage/line',
             component: LineManage
+          },
+          {
+            path: '/manage/department',
+            component: DepartmentManage
           }
         ]
       }
