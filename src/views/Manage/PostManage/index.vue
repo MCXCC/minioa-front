@@ -19,21 +19,6 @@ const form = reactive({
   }
 })
 
-const getPostData = async () => {
-  const res = await postAPI().query()
-  postData.value = res.data
-  console.log(postData.value)
-}
-
-onMounted(() => {
-  getPostData()
-})
-
-const handleDelete = async (index: number, row: postItem) => {
-  await postAPI().del(row.id)
-  await getPostData()
-}
-
 const filterTableData = computed(() =>
   postData.value?.filter(
     (data) =>
@@ -42,39 +27,95 @@ const filterTableData = computed(() =>
   ) as [postItem]
 )
 
-const openCreateWindow = () => {
-  // 清除数据
-  form.create.title = ''
-  visible.value.create = true
+/**
+ * 获得岗位数据
+ */
+const getPostData = async () => {
+  const res = await postAPI().query()
+  postData.value = res.data
+  console.log(postData.value)
 }
 
-const openEditWindow = (index: number, row: postItem) => {
-  console.log(index, row)
-  // 填充数据
-  if (postData.value) {
-    form.edit.id = postData.value[index].id.toString()
-    form.edit.title = postData.value[index].title
+/**
+ * 删除岗位
+ * @param index 序列号
+ * @param row 数据
+ */
+const handleDelete = async (index: number, row: postItem) => {
+  await postAPI().del(row.id)
+  await getPostData()
+}
+
+/**
+ * 打开弹窗
+ */
+const openDialog = () => {
+  /**
+   * 创建表单
+   */
+  const create = () => {
+    // 清除数据
+    form.create.title = ''
+    visible.value.create = true
   }
-  visible.value.edit = true
+
+  /**
+   * 更新表单
+   * @param index 序列号
+   * @param row 数据
+   */
+  const edit = (index: number, row: postItem) => {
+    console.log(index, row)
+    // 填充数据
+    if (postData.value) {
+      form.edit.id = row.id.toString()
+      form.edit.title = row.title
+    }
+    visible.value.edit = true
+  }
+
+  return {
+    create,
+    edit
+  }
 }
 
-const createSubmit = async () => {
-  await postAPI().add(form.create as postItem)
-  await getPostData()
-  visible.value.create = false
+/**
+ * 提交表单
+ */
+const onSubmit = () => {
+  /**
+   * 创建岗位
+   */
+  const create = async () => {
+    await postAPI().add(form.create as postItem)
+    await getPostData()
+    visible.value.create = false
+  }
+
+  /**
+   * 更新岗位
+   */
+  const update = async () => {
+    await postAPI().update(form.edit as unknown as postItem)
+    await getPostData()
+    visible.value.edit = false
+  }
+
+  return {
+    create,
+    update
+  }
 }
 
-const updateSubmit = async () => {
-  await postAPI().update(form.edit as unknown as postItem)
-  await getPostData()
-  visible.value.edit = false
-}
-
+onMounted(() => {
+  getPostData()
+})
 </script>
 
 <template>
   <!--新建按钮-->
-  <el-button type="primary" style="margin-right: 16px" @click="openCreateWindow">新建岗位</el-button>
+  <el-button type="primary" style="margin-right: 16px" @click="openDialog().create()">新建岗位</el-button>
 
   <!--主体表格-->
   <el-table :data="filterTableData " height="250" style="width: 100%">
@@ -88,7 +129,7 @@ const updateSubmit = async () => {
       </template>
       <template #default="scope">
         <!--更新按钮-->
-        <el-button size="small" @click="openEditWindow(scope.$index, scope.row)">编辑</el-button>
+        <el-button size="small" @click="openDialog().edit(scope.$index, scope.row)">编辑</el-button>
         <el-popconfirm title="确定要删除该岗位吗？" confirm-button-text="确定" cancel-button-text="取消"
                        @confirm="handleDelete(scope.$index, scope.row)">
           <template #reference>
@@ -110,7 +151,7 @@ const updateSubmit = async () => {
         <el-input v-model="form.create.title"/>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="createSubmit">创建</el-button>
+        <el-button type="primary" @click="onSubmit().create()">创建</el-button>
         <el-button @click="visible.create=false">取消</el-button>
       </el-form-item>
     </el-form>
@@ -123,7 +164,7 @@ const updateSubmit = async () => {
         <el-input v-model="form.edit.title"/>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="updateSubmit">更新</el-button>
+        <el-button type="primary" @click="onSubmit().update()">更新</el-button>
         <el-button @click="visible.edit=false">取消</el-button>
       </el-form-item>
     </el-form>
