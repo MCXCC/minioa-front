@@ -16,10 +16,12 @@ module.exports = {
     }
   },
   devServer: {
+    host: '127.0.0.1',
+    port: 5532,
     proxy: {
       '/json_demo': {
         // 跨域的服务器地址
-        target: 'http://[2409:8a34:2060:faf0:5554:e843:39ee:3430]:5531',
+        target: 'http://127.0.0.1:5531',
         // 是否允许跨域
         changeOrigin: true,
         // 替换掉请求路径的/json_demo“”

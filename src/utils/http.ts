@@ -5,7 +5,7 @@ import { useUserStore } from '@/stores/userStore'
 import { useRouter } from 'vue-router'
 
 export const httpInstance = axios.create({
-  baseURL: 'http://[2409:8a34:2060:faf0:5554:e843:39ee:3430]:5531',
+  baseURL: 'http://127.0.0.1:5531',
   timeout: 5000
 })
 
