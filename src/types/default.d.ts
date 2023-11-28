@@ -1,16 +1,3 @@
-export type userItem = {
-  id: number,
-  workNumber:string,
-  password:string,
-  name:string,
-  avatarUrl:string,
-  postId:number,
-  departmentId:number,
-  lineId:number,
-  createTime: Date,
-  updateTime: Date,
-}
-
 export type lineItem = {
   id: number,
   title: string,
@@ -29,6 +16,19 @@ export type departmentItem = {
 export type postItem = {
   id: number,
   title: string,
+  createTime: Date,
+  updateTime: Date,
+}
+
+export type userItem = {
+  id: number,
+  workNumber: string,
+  password: string,
+  name: string,
+  avatarUrl: string,
+  post: postItem,
+  department: departmentItem,
+  line: lineItem,
   createTime: Date,
   updateTime: Date,
 }

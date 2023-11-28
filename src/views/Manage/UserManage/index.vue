@@ -58,22 +58,22 @@ const filterTableData = computed(() =>
     (data) => !search.value ||
       data.name.toLowerCase().includes(search.value.toLowerCase()) ||
       data.workNumber.toLowerCase().includes(search.value.toLowerCase())
-  )
+  ) as [userItem]
 )
 
 const form = reactive({
   workNumber: 'D',
   name: '',
-  postId: '',
-  lineId: '',
-  departmentId: ''
+  post: '',
+  line: '',
+  department: ''
 })
 
 const clearForm = () => {
   form.name = ''
-  form.departmentId = ''
-  form.lineId = ''
-  form.postId = ''
+  form.department = ''
+  form.line = ''
+  form.post = ''
   form.workNumber = 'D'
 }
 
@@ -107,32 +107,32 @@ const onSubmit = async () => {
         <el-input v-model="form.name"/>
       </el-form-item>
       <el-form-item required label="岗位">
-        <el-select v-model="form.postId" value-key="id" placeholder="Select">
+        <el-select v-model="form.post" value-key="id" placeholder="Select">
           <el-option
             v-for="item in postData"
             :key="item.id"
             :label="item.title"
-            :value="item.id"
+            :value="item"
           />
         </el-select>
       </el-form-item>
       <el-form-item required label="所属线路">
-        <el-select v-model="form.lineId" value-key="id" placeholder="Select">
+        <el-select v-model="form.line" value-key="id" placeholder="Select">
           <el-option
             v-for="item in lineData"
             :key="item.id"
             :label="item.title"
-            :value="item.id"
+            :value="item"
           />
         </el-select>
       </el-form-item>
       <el-form-item required label="部门">
-        <el-select v-model="form.departmentId" value-key="id" placeholder="Select">
+        <el-select v-model="form.department" value-key="id" placeholder="Select">
           <el-option
             v-for="item in departmentData"
             :key="item.id"
             :label="item.title"
-            :value="item.id"
+            :value="item"
           />
         </el-select>
       </el-form-item>
@@ -145,9 +145,9 @@ const onSubmit = async () => {
   <el-table :data="filterTableData " height="250" style="width: 100%">
     <el-table-column prop="workNumber" label="工号" width="auto"/>
     <el-table-column prop="name" label="姓名" width="auto"/>
-    <el-table-column prop="postId" label="岗位" width="auto"/>
-    <el-table-column prop="lineId" label="所属线路" width="auto"/>
-    <el-table-column prop="departmentId" label="部门" width="auto"/>
+    <el-table-column prop="post.title" label="岗位" width="auto"/>
+    <el-table-column prop="line.title" label="所属线路" width="auto"/>
+    <el-table-column prop="department.title" label="部门" width="auto"/>
     <el-table-column prop="createTime" label="创建时间" width="auto"/>
     <el-table-column prop="updateTime" label="更新时间" width="auto"/>
     <el-table-column align="right">
