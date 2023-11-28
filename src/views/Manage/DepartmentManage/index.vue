@@ -6,15 +6,15 @@ import { departmentItem } from '@/types/default'
 const department = departmentAPI()
 const visible = ref(false)
 const search = ref('')
-const departmentDate = ref<[departmentItem]>()
-const getDepartmentDate = async () => {
+const departmentData = ref<[departmentItem]>()
+const getDepartmentData = async () => {
   const res = await department.query()
-  departmentDate.value = res.data
-  console.log(departmentDate.value)
+  departmentData.value = res.data
+  console.log(departmentData.value)
 }
 
 onMounted(() => {
-  getDepartmentDate()
+  getDepartmentData()
 })
 
 const handleEdit = (index: number, row: departmentItem) => {
@@ -22,11 +22,11 @@ const handleEdit = (index: number, row: departmentItem) => {
 }
 const handleDelete = async (index: number, row: departmentItem) => {
   await department.del(row.id)
-  await getDepartmentDate()
+  await getDepartmentData()
 }
 
 const filterTableData = computed(() =>
-  departmentDate.value?.filter(
+  departmentData.value?.filter(
     (data) =>
       !search.value ||
       data.title.toLowerCase().includes(search.value.toLowerCase())
@@ -38,7 +38,7 @@ const form = reactive({
 
 const onSubmit = async () => {
   await department.add(form as departmentItem)
-  await getDepartmentDate()
+  await getDepartmentData()
   visible.value = false
 }
 
@@ -60,7 +60,9 @@ const onSubmit = async () => {
     </el-form>
   </el-popover>
   <el-table :data="filterTableData " height="250" style="width: 100%">
-    <el-table-column prop="title" label="部门" width="180"/>
+    <el-table-column prop="title" label="部门" width="auto"/>
+    <el-table-column prop="createTime" label="创建时间" width="auto"/>
+    <el-table-column prop="updateTime" label="更新时间" width="auto"/>
     <el-table-column align="right">
       <template #header>
         <el-input v-model="search" size="small" placeholder="搜索"/>

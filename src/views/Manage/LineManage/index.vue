@@ -6,15 +6,15 @@ import { lineItem } from '@/types/default'
 const line = lineAPI()
 const visible = ref(false)
 const search = ref('')
-const lineDate = ref<[lineItem]>()
-const getLineDate = async () => {
+const lineData = ref<[lineItem]>()
+const getLineData = async () => {
   const res = await line.query()
-  lineDate.value = res.data
-  console.log(lineDate.value)
+  lineData.value = res.data
+  console.log(lineData.value)
 }
 
 onMounted(() => {
-  getLineDate()
+  getLineData()
 })
 
 const handleEdit = (index: number, row: lineItem) => {
@@ -22,11 +22,11 @@ const handleEdit = (index: number, row: lineItem) => {
 }
 const handleDelete = async (index: number, row: lineItem) => {
   await line.del(row.id)
-  await getLineDate()
+  await getLineData()
 }
 
 const filterTableData = computed(() =>
-  lineDate.value?.filter(
+  lineData.value?.filter(
     (data) =>
       !search.value ||
       data.title.toLowerCase().includes(search.value.toLowerCase())
@@ -38,7 +38,7 @@ const form = reactive({
 
 const onSubmit = async () => {
   await line.add(form as lineItem)
-  await getLineDate()
+  await getLineData()
   visible.value = false
 }
 
@@ -60,8 +60,10 @@ const onSubmit = async () => {
     </el-form>
   </el-popover>
   <el-table :data="filterTableData " style="width: 100%">
-    <el-table-column prop="title" label="线路" width="180"/>
-    <el-table-column prop="directorId" label="分管主任" width="180"/>
+    <el-table-column prop="title" label="线路" width="auto"/>
+    <el-table-column prop="directorId" label="分管主任" width="auto"/>
+    <el-table-column prop="createTime" label="创建时间" width="auto"/>
+    <el-table-column prop="updateTime" label="更新时间" width="auto"/>
     <el-table-column align="right">
       <template #header>
         <el-input v-model="search" size="small" placeholder="搜索"/>

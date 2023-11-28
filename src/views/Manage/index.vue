@@ -9,7 +9,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
 const router = useRouter()
 
 onMounted(() => {
-  router.push('/manage/department')
+  router.push('/manage/user')
 })
 </script>
 

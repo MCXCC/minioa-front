@@ -6,15 +6,15 @@ import { postItem } from '@/types/default'
 const post = postAPI()
 const visible = ref(false)
 const search = ref('')
-const postDate = ref<[postItem]>()
-const getPostDate = async () => {
+const postData = ref<[postItem]>()
+const getPostData = async () => {
   const res = await post.query()
-  postDate.value = res.data
-  console.log(postDate.value)
+  postData.value = res.data
+  console.log(postData.value)
 }
 
 onMounted(() => {
-  getPostDate()
+  getPostData()
 })
 
 const handleEdit = (index: number, row: postItem) => {
@@ -22,11 +22,11 @@ const handleEdit = (index: number, row: postItem) => {
 }
 const handleDelete = async (index: number, row: postItem) => {
   await post.del(row.id)
-  await getPostDate()
+  await getPostData()
 }
 
 const filterTableData = computed(() =>
-  postDate.value?.filter(
+  postData.value?.filter(
     (data) =>
       !search.value ||
       data.title.toLowerCase().includes(search.value.toLowerCase())
@@ -38,7 +38,7 @@ const form = reactive({
 
 const onSubmit = async () => {
   await post.add(form as postItem)
-  await getPostDate()
+  await getPostData()
   visible.value = false
 }
 
@@ -60,7 +60,9 @@ const onSubmit = async () => {
     </el-form>
   </el-popover>
   <el-table :data="filterTableData " height="250" style="width: 100%">
-    <el-table-column prop="title" label="岗位" width="180"/>
+    <el-table-column prop="title" label="岗位" width="auto"/>
+    <el-table-column prop="createTime" label="创建时间" width="auto"/>
+    <el-table-column prop="updateTime" label="更新时间" width="auto"/>
     <el-table-column align="right">
       <template #header>
         <el-input v-model="search" size="small" placeholder="搜索"/>
