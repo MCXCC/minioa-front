@@ -7,14 +7,14 @@ const department = departmentAPI()
 const visible = ref(false)
 const search = ref('')
 const departmentDate = ref<[departmentItem]>()
-const getLineDate = async () => {
+const getDepartmentDate = async () => {
   const res = await department.query()
   departmentDate.value = res.data
   console.log(departmentDate.value)
 }
 
 onMounted(() => {
-  getLineDate()
+  getDepartmentDate()
 })
 
 const handleEdit = (index: number, row: departmentItem) => {
@@ -22,7 +22,7 @@ const handleEdit = (index: number, row: departmentItem) => {
 }
 const handleDelete = async (index: number, row: departmentItem) => {
   await department.del(row.id)
-  await getLineDate()
+  await getDepartmentDate()
 }
 
 const filterTableData = computed(() =>
@@ -38,7 +38,7 @@ const form = reactive({
 
 const onSubmit = async () => {
   await department.add(form as departmentItem)
-  await getLineDate()
+  await getDepartmentDate()
   visible.value = false
 }
 
@@ -69,7 +69,7 @@ const onSubmit = async () => {
         <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
           编辑
         </el-button>
-        <el-popconfirm title="确定要删除该线路吗？" confirm-button-text="确定" cancel-button-text="取消" @confirm="handleDelete(scope.$index, scope.row)">
+        <el-popconfirm title="确定要删除该部门吗？" confirm-button-text="确定" cancel-button-text="取消" @confirm="handleDelete(scope.$index, scope.row)">
           <template #reference>
             <el-button
               size="small"

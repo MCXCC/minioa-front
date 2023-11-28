@@ -59,9 +59,9 @@ const onSubmit = async () => {
       </el-form-item>
     </el-form>
   </el-popover>
-  <el-table :data="filterTableData " height="250" style="width: 100%">
+  <el-table :data="filterTableData " style="width: 100%">
     <el-table-column prop="title" label="线路" width="180"/>
-    <el-table-column prop="directorId" label="分管主任ID" width="180"/>
+    <el-table-column prop="directorId" label="分管主任" width="180"/>
     <el-table-column align="right">
       <template #header>
         <el-input v-model="search" size="small" placeholder="搜索"/>

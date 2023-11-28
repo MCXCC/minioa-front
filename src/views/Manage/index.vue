@@ -9,7 +9,6 @@ const handleSelect = (key: string, keyPath: string[]) => {
 const router = useRouter()
 
 onMounted(() => {
-  setTimeout(() => { return 0 }, 10)
   router.push('/manage/department')
 })
 </script>
@@ -22,10 +21,10 @@ onMounted(() => {
     @select="handleSelect"
     background-color="#F3F3F3FF"
     router="router">
-    <el-menu-item index="1" route="/manage/department">部门管理</el-menu-item>
-    <el-menu-item index="2" route="/manage/line">线路管理</el-menu-item>
-    <el-menu-item index="3" disabled>岗位管理</el-menu-item>
-    <el-menu-item index="4" disabled>专业管理</el-menu-item>
+    <el-menu-item index="1" route="/manage/user">人员管理</el-menu-item>
+    <el-menu-item index="2" route="/manage/department">部门管理</el-menu-item>
+    <el-menu-item index="3" route="/manage/line">线路管理</el-menu-item>
+    <el-menu-item index="4" route="/manage/post">岗位管理</el-menu-item>
   </el-menu>
   <RouterView/>
 </template>
