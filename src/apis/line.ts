@@ -26,9 +26,18 @@ export const lineAPI = () => {
     })
   }
 
+  const update = (lineData:lineItem) => {
+    return http({
+      url: '/line',
+      method: 'PUT',
+      data: lineData
+    })
+  }
+
   return {
     query,
     add,
-    del
+    del,
+    update
   }
 }
