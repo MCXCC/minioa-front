@@ -6,37 +6,57 @@ import { departmentAPI } from '@/apis/department'
 import { lineAPI } from '@/apis/line'
 import { userItem, postItem, lineItem, departmentItem } from '@/types/default'
 
-const user = userAPI()
-const post = postAPI()
-const line = lineAPI()
-const department = departmentAPI()
+/**
+ * 用户数据
+ */
 const userData = ref<[userItem]>()
+/**
+ * 岗位数据
+ */
 const postData = ref<[postItem]>()
+/**
+ * 线路数据
+ */
 const lineData = ref<[lineItem]>()
+/**
+ * 部门数据
+ */
 const departmentData = ref<[departmentItem]>()
 const visible = ref(false)
 const search = ref('')
 
+/**
+ * 获得用户数据
+ */
 const getUserData = async () => {
-  const res = await user.query()
+  const res = await userAPI().query()
   userData.value = res.data
   console.log(userData.value)
 }
 
+/**
+ * 获得岗位数据
+ */
 const getPostData = async () => {
-  const res = await post.query()
+  const res = await postAPI().query()
   postData.value = res.data
   console.log(postData.value)
 }
 
+/**
+ * 获得线路数据
+ */
 const getLineData = async () => {
-  const res = await line.query()
+  const res = await lineAPI().query()
   lineData.value = res.data
   console.log(lineData.value)
 }
 
+/**
+ * 获得部门数据
+ */
 const getDepartmentData = async () => {
-  const res = await department.query()
+  const res = await departmentAPI().query()
   departmentData.value = res.data
   console.log(departmentData.value)
 }
@@ -48,8 +68,9 @@ onMounted(() => {
 const handleEdit = (index: number, row: postItem) => {
   console.log(index, row)
 }
+
 const handleDelete = async (index: number, row: postItem) => {
-  await user.del(row.id)
+  await userAPI().del(row.id)
   await getUserData()
 }
 
@@ -87,7 +108,7 @@ const createNew = () => {
 
 const onSubmit = async () => {
   console.log(form)
-  await user.add(form as unknown as userItem)
+  await userAPI().add(form as unknown as userItem)
   await getUserData()
   visible.value = false
 }

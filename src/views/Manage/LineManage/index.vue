@@ -3,12 +3,11 @@ import { onMounted, ref, computed, reactive } from 'vue'
 import { lineAPI } from '@/apis/line'
 import { lineItem } from '@/types/default'
 
-const line = lineAPI()
 const visible = ref(false)
 const search = ref('')
 const lineData = ref<[lineItem]>()
 const getLineData = async () => {
-  const res = await line.query()
+  const res = await lineAPI().query()
   lineData.value = res.data
   console.log(lineData.value)
 }
@@ -21,7 +20,7 @@ const handleEdit = (index: number, row: lineItem) => {
   console.log(index, row)
 }
 const handleDelete = async (index: number, row: lineItem) => {
-  await line.del(row.id)
+  await lineAPI().del(row.id)
   await getLineData()
 }
 
@@ -37,7 +36,7 @@ const form = reactive({
 })
 
 const onSubmit = async () => {
-  await line.add(form as lineItem)
+  await lineAPI().add(form as lineItem)
   await getLineData()
   visible.value = false
 }

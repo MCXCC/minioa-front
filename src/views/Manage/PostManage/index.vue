@@ -3,12 +3,11 @@ import { onMounted, ref, computed, reactive } from 'vue'
 import { postAPI } from '@/apis/post'
 import { postItem } from '@/types/default'
 
-const post = postAPI()
 const visible = ref(false)
 const search = ref('')
 const postData = ref<[postItem]>()
 const getPostData = async () => {
-  const res = await post.query()
+  const res = await postAPI().query()
   postData.value = res.data
   console.log(postData.value)
 }
@@ -21,7 +20,7 @@ const handleEdit = (index: number, row: postItem) => {
   console.log(index, row)
 }
 const handleDelete = async (index: number, row: postItem) => {
-  await post.del(row.id)
+  await postAPI().del(row.id)
   await getPostData()
 }
 
@@ -37,7 +36,7 @@ const form = reactive({
 })
 
 const onSubmit = async () => {
-  await post.add(form as postItem)
+  await postAPI().add(form as postItem)
   await getPostData()
   visible.value = false
 }

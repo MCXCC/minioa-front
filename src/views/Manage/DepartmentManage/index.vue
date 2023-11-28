@@ -3,12 +3,11 @@ import { onMounted, ref, computed, reactive } from 'vue'
 import { departmentAPI } from '@/apis/department'
 import { departmentItem } from '@/types/default'
 
-const department = departmentAPI()
 const visible = ref(false)
 const search = ref('')
 const departmentData = ref<[departmentItem]>()
 const getDepartmentData = async () => {
-  const res = await department.query()
+  const res = await departmentAPI().query()
   departmentData.value = res.data
   console.log(departmentData.value)
 }
@@ -21,7 +20,7 @@ const handleEdit = (index: number, row: departmentItem) => {
   console.log(index, row)
 }
 const handleDelete = async (index: number, row: departmentItem) => {
-  await department.del(row.id)
+  await departmentAPI().del(row.id)
   await getDepartmentData()
 }
 
@@ -37,7 +36,7 @@ const form = reactive({
 })
 
 const onSubmit = async () => {
-  await department.add(form as departmentItem)
+  await departmentAPI().add(form as departmentItem)
   await getDepartmentData()
   visible.value = false
 }
