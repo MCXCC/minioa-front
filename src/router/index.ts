@@ -6,6 +6,8 @@ import Test from '@/views/Test/index.vue'
 import Manage from '@/views/Manage/index.vue'
 import LineManage from '@/views/Manage/LineManage/index.vue'
 import DepartmentManage from '@/views/Manage/DepartmentManage/index.vue'
+import PostManage from '@/views/Manage/PostManage/index.vue'
+import UserManage from '@/views/Manage/UserManage/index.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -27,6 +29,14 @@ const routes: Array<RouteRecordRaw> = [
           {
             path: '/manage/department',
             component: DepartmentManage
+          },
+          {
+            path: '/manage/post',
+            component: PostManage
+          },
+          {
+            path: '/manage/user',
+            component: UserManage
           }
         ]
       }

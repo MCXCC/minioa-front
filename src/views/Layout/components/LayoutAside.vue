@@ -54,7 +54,7 @@ const handleClose = (key: string, keyPath: string[]) => {
           <el-icon>
             <document/>
           </el-icon>
-          <span>架构管理</span>
+          <span>人事管理</span>
         </el-menu-item>
         <el-menu-item index="4" disabled>
           <el-icon>

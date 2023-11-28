@@ -1,5 +1,14 @@
 export type userItem = {
-  id: number
+  id: number,
+  workNumber:string,
+  password:string,
+  name:string,
+  avatarUrl:string,
+  postId:number,
+  departmentId:number,
+  lineId:number,
+  createTime: Date,
+  updateTime: Date,
 }
 
 export type lineItem = {
@@ -11,6 +20,13 @@ export type lineItem = {
 }
 
 export type departmentItem = {
+  id: number,
+  title: string,
+  createTime: Date,
+  updateTime: Date,
+}
+
+export type postItem = {
   id: number,
   title: string,
   createTime: Date,
