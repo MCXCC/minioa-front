@@ -114,23 +114,27 @@ onMounted(() => {
 </script>
 
 <template>
-  <!--新建按钮-->
-  <el-button type="primary" style="margin-right: 16px" @click="openDialog().create()">新建部门</el-button>
-
   <!--主体表格-->
   <el-table :data="filterTableData " height="250" style="width: 100%">
     <el-table-column prop="title" label="部门" width="auto"/>
     <el-table-column prop="createTime" label="创建时间" width="auto"/>
     <el-table-column prop="updateTime" label="更新时间" width="auto"/>
     <el-table-column align="right">
-      <!--搜索栏-->
+      <!--表头右栏-->
       <template #header>
-        <el-input v-model="search" size="small" placeholder="搜索"/>
+        <div style="display: flex">
+          <!--搜索栏-->
+          <el-input v-model="search" size="small" placeholder="搜索"/>
+          <!--新建按钮-->
+          <el-button type="primary" style="margin-left: 16px" @click="openDialog().create()">新建部门</el-button>
+        </div>
       </template>
+
       <template #default="scope">
         <!--更新按钮-->
         <el-button size="small" @click="openDialog().edit(scope.$index, scope.row)">编辑</el-button>
-        <el-popconfirm title="确定要删除该部门吗？" confirm-button-text="确定" cancel-button-text="取消" @confirm="handleDelete(scope.$index, scope.row)">
+        <el-popconfirm title="确定要删除该部门吗？" confirm-button-text="确定" cancel-button-text="取消"
+                       @confirm="handleDelete(scope.$index, scope.row)">
           <template #reference>
             <el-button
               size="small"

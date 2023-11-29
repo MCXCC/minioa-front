@@ -129,9 +129,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <!--新建按钮-->
-  <el-button type="primary" style="margin-right: 16px" @click="openDialog().create()">新建线路</el-button>
-
   <!--主体表格-->
   <el-table :data="filterTableData " style="width: 100%">
     <el-table-column prop="title" label="线路" width="auto"/>
@@ -139,8 +136,14 @@ onMounted(() => {
     <el-table-column prop="createTime" label="创建时间" width="auto"/>
     <el-table-column prop="updateTime" label="更新时间" width="auto"/>
     <el-table-column align="right">
+      <!--表头右栏-->
       <template #header>
-        <el-input v-model="search" size="small" placeholder="搜索"/>
+        <div style="display: flex">
+          <!--搜索栏-->
+          <el-input v-model="search" size="small" placeholder="搜索"/>
+          <!--新建按钮-->
+          <el-button type="primary" style="margin-left: 16px" @click="openDialog().create()">新建线路</el-button>
+        </div>
       </template>
       <template #default="scope">
         <!--更新按钮-->
@@ -179,7 +182,7 @@ onMounted(() => {
         <el-input v-model="form.edit.title"/>
       </el-form-item>
       <el-form-item label="分管主任">
-        <el-select v-model="form.edit.director" filterable placeholder="Select">
+        <el-select v-model="form.edit.director" filterable clearable placeholder="Select">
           <el-option
             v-for="item in userData"
             :key="item.id"

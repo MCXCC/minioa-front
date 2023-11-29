@@ -114,18 +114,20 @@ onMounted(() => {
 </script>
 
 <template>
-  <!--新建按钮-->
-  <el-button type="primary" style="margin-right: 16px" @click="openDialog().create()">新建岗位</el-button>
-
   <!--主体表格-->
   <el-table :data="filterTableData " height="250" style="width: 100%">
     <el-table-column prop="title" label="岗位" width="auto"/>
     <el-table-column prop="createTime" label="创建时间" width="auto"/>
     <el-table-column prop="updateTime" label="更新时间" width="auto"/>
     <el-table-column align="right">
-      <!--搜索栏-->
+      <!--表头右栏-->
       <template #header>
-        <el-input v-model="search" size="small" placeholder="搜索"/>
+        <div style="display: flex">
+          <!--搜索栏-->
+          <el-input v-model="search" size="small" placeholder="搜索"/>
+          <!--新建按钮-->
+          <el-button type="primary" style="margin-left: 16px" @click="openDialog().create()">新建岗位</el-button>
+        </div>
       </template>
       <template #default="scope">
         <!--更新按钮-->
