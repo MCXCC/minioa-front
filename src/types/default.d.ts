@@ -1,11 +1,3 @@
-export type lineItem = {
-  id: number,
-  title: string,
-  directorId: number,
-  createTime: Date,
-  updateTime: Date,
-}
-
 export type departmentItem = {
   id: number,
   title: string,
@@ -16,6 +8,15 @@ export type departmentItem = {
 export type postItem = {
   id: number,
   title: string,
+  createTime: Date,
+  updateTime: Date,
+}
+
+export type lineItem = {
+  id: number,
+  title: string,
+  // eslint-disable-next-line no-use-before-define
+  director: userItem,
   createTime: Date,
   updateTime: Date,
 }
