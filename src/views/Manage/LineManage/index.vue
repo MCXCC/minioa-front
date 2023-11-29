@@ -182,11 +182,11 @@ onMounted(() => {
         <el-input v-model="form.edit.title"/>
       </el-form-item>
       <el-form-item label="分管主任">
-        <el-select v-model="form.edit.director" filterable clearable placeholder="Select">
+        <el-select v-model="form.edit.director" value-key="id" filterable clearable placeholder="Select">
           <el-option
             v-for="item in userData"
             :key="item.id"
-            :label="'工号：'+item.workNumber +'\t'+'姓名：'+ item.name"
+            :label="'【'+item.workNumber +'】\t'+ item.name"
             :value="item"
           />
         </el-select>

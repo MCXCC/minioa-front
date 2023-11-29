@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, computed, reactive } from 'vue'
+import { onMounted, ref, computed, reactive, openBlock } from 'vue'
 import { userAPI } from '@/apis/user'
 import { postAPI } from '@/apis/post'
 import { departmentAPI } from '@/apis/department'
@@ -22,8 +22,36 @@ const lineData = ref<[lineItem]>()
  * 部门数据
  */
 const departmentData = ref<[departmentItem]>()
-const visible = ref(false)
+const visible = ref({
+  create: false,
+  edit: false
+})
 const search = ref('')
+const form = reactive({
+  create: {
+    workNumber: 'D',
+    name: '',
+    post: {},
+    line: {},
+    department: {}
+  },
+  edit: {
+    id: '',
+    workNumber: 'D',
+    name: '',
+    post: {},
+    line: {},
+    department: {}
+  }
+})
+
+const filterTableData = computed(() =>
+  userData.value?.filter(
+    (data) => !search.value ||
+      data.name.toLowerCase().includes(search.value.toLowerCase()) ||
+      data.workNumber.toLowerCase().includes(search.value.toLowerCase())
+  ) as [userItem]
+)
 
 /**
  * 获得用户数据
@@ -61,124 +89,121 @@ const getDepartmentData = async () => {
   console.log(departmentData.value)
 }
 
-onMounted(() => {
-  getUserData()
-})
-
-const handleEdit = (index: number, row: postItem) => {
-  console.log(index, row)
-}
-
+/**
+ * 删除员工
+ * @param index 序列号
+ * @param row 数据
+ */
 const handleDelete = async (index: number, row: postItem) => {
   await userAPI().del(row.id)
   await getUserData()
 }
 
-const filterTableData = computed(() =>
-  userData.value?.filter(
-    (data) => !search.value ||
-      data.name.toLowerCase().includes(search.value.toLowerCase()) ||
-      data.workNumber.toLowerCase().includes(search.value.toLowerCase())
-  ) as [userItem]
-)
+/**
+ * 打开弹窗
+ */
+const openDialog = () => {
+  /**
+   * 创建表单
+   */
+  const create = () => {
+    // 清除数据
+    form.create.name = ''
+    form.create.department = ''
+    form.create.line = ''
+    form.create.post = ''
+    form.create.workNumber = 'D'
 
-const form = reactive({
-  workNumber: 'D',
-  name: '',
-  post: '',
-  line: '',
-  department: ''
+    visible.value.create = true
+    getPostData()
+    getLineData()
+    getDepartmentData()
+  }
+
+  /**
+   * 更新表单
+   * @param index 序列号
+   * @param row 数据
+   */
+  const edit = (index: number, row: userItem) => {
+    console.log(index, row)
+    // 填充数据
+    if (userData.value) {
+      form.edit.id = row.id.toString()
+      form.edit.workNumber = row.workNumber
+      form.edit.name = row.name
+      form.edit.department = row.department
+      form.edit.line = row.line
+      form.edit.post = row.post
+    }
+    getLineData()
+    getPostData()
+    getDepartmentData()
+    visible.value.edit = true
+  }
+
+  return {
+    create,
+    edit
+  }
+}
+
+/**
+ * 提交表单
+ */
+const onSubmit = () => {
+  /**
+   * 创建岗位
+   */
+  const create = async () => {
+    await userAPI().add(form.create as unknown as userItem)
+    await getUserData()
+    visible.value.create = false
+  }
+
+  /**
+   * 更新岗位
+   */
+  const update = async () => {
+    await userAPI().update(form.edit as unknown as userItem)
+    await getUserData()
+    visible.value.edit = false
+  }
+
+  return {
+    create,
+    update
+  }
+}
+
+onMounted(() => {
+  getUserData()
 })
-
-const clearForm = () => {
-  form.name = ''
-  form.department = ''
-  form.line = ''
-  form.post = ''
-  form.workNumber = 'D'
-}
-
-const createNew = () => {
-  clearForm()
-  visible.value = true
-  getPostData()
-  getLineData()
-  getDepartmentData()
-}
-
-const onSubmit = async () => {
-  console.log(form)
-  await userAPI().add(form as unknown as userItem)
-  await getUserData()
-  visible.value = false
-}
 
 </script>
 
 <template>
-  <el-popover :visible="visible" style="text-align: right;" placement="right" :width="400" trigger="click">
-    <template #reference>
-      <el-button type="primary" style="margin-right: 16px" @click="createNew">新建员工</el-button>
-    </template>
-    <el-form :model="form" label-width="120px">
-      <el-form-item required label="工号">
-        <el-input v-model="form.workNumber"/>
-      </el-form-item>
-      <el-form-item label="姓名">
-        <el-input v-model="form.name"/>
-      </el-form-item>
-      <el-form-item required label="岗位">
-        <el-select v-model="form.post" value-key="id" placeholder="Select">
-          <el-option
-            v-for="item in postData"
-            :key="item.id"
-            :label="item.title"
-            :value="item"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item required label="所属线路">
-        <el-select v-model="form.line" value-key="id" placeholder="Select">
-          <el-option
-            v-for="item in lineData"
-            :key="item.id"
-            :label="item.title"
-            :value="item"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item required label="部门">
-        <el-select v-model="form.department" value-key="id" placeholder="Select">
-          <el-option
-            v-for="item in departmentData"
-            :key="item.id"
-            :label="item.title"
-            :value="item"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">创建</el-button>
-        <el-button @click="visible=false">取消</el-button>
-      </el-form-item>
-    </el-form>
-  </el-popover>
-  <el-table :data="filterTableData " height="250" style="width: 100%">
-    <el-table-column prop="workNumber" label="工号" width="auto"/>
-    <el-table-column prop="name" label="姓名" width="auto"/>
-    <el-table-column prop="post.title" label="岗位" width="auto"/>
-    <el-table-column prop="line.title" label="所属线路" width="auto"/>
-    <el-table-column prop="department.title" label="部门" width="auto"/>
-    <el-table-column prop="createTime" label="创建时间" width="auto"/>
-    <el-table-column prop="updateTime" label="更新时间" width="auto"/>
-    <el-table-column align="right">
+  <!--主体表格-->
+  <el-table :data="filterTableData " border height="250" style="width: 100%">
+    <el-table-column fixed prop="workNumber" label="工号" width="80px" align="center"/>
+    <el-table-column fixed prop="name" label="姓名" width="100px" align="center"/>
+    <el-table-column prop="post.title" label="岗位" width="120px" align="center"/>
+    <el-table-column prop="line.title" label="所属线路" width="100px" align="center"/>
+    <el-table-column prop="department.title" label="部门" width="160px" align="center"/>
+    <el-table-column prop="createTime" label="创建时间" width="200px" align="center"/>
+    <el-table-column prop="updateTime" label="更新时间" width="200px" align="center"/>
+    <el-table-column fixed="right" align="right" width="300px">
       <template #header>
-        <el-input v-model="search" size="small" placeholder="搜索"/>
+        <div style="display: flex">
+          <!--搜索栏-->
+          <el-input v-model="search" size="small" placeholder="搜索"/>
+          <!--新建按钮-->
+          <el-button type="primary" style="margin-left: 16px" @click="openDialog().create()">新建员工</el-button>
+        </div>
       </template>
       <template #default="scope">
-        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
-          编辑
-        </el-button>
+        <!--更新按钮-->
+        <el-button size="small" @click="openDialog().edit(scope.$index, scope.row)">编辑</el-button>
         <el-popconfirm title="确定要删除该员工吗？" confirm-button-text="确定" cancel-button-text="取消"
                        @confirm="handleDelete(scope.$index, scope.row)">
           <template #reference>
@@ -192,6 +217,98 @@ const onSubmit = async () => {
       </template>
     </el-table-column>
   </el-table>
+
+  <!--新建员工表单弹窗-->
+  <el-dialog v-model="visible.create" title="新建员工">
+    <el-form :model="form.create" label-width="120px">
+      <el-form-item required label="工号">
+        <el-input v-model="form.create.workNumber"/>
+      </el-form-item>
+      <el-form-item label="姓名">
+        <el-input v-model="form.create.name"/>
+      </el-form-item>
+      <el-form-item required label="岗位">
+        <el-select v-model="form.create.post" value-key="id" placeholder="Select">
+          <el-option
+            v-for="item in postData"
+            :key="item.id"
+            :label="item.title"
+            :value="item"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item required label="所属线路">
+        <el-select v-model="form.create.line" value-key="id" placeholder="Select">
+          <el-option
+            v-for="item in lineData"
+            :key="item.id"
+            :label="item.title"
+            :value="item"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item required label="部门">
+        <el-select v-model="form.create.department" value-key="id" placeholder="Select">
+          <el-option
+            v-for="item in departmentData"
+            :key="item.id"
+            :label="item.title"
+            :value="item"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit().create()">创建</el-button>
+        <el-button @click="visible.create=false">取消</el-button>
+      </el-form-item>
+    </el-form>
+  </el-dialog>
+
+  <!--更新员工表单弹窗-->
+  <el-dialog v-model="visible.edit" title="更新岗位">
+    <el-form :model="form.edit" label-width="120px">
+      <el-form-item required label="工号">
+        <el-input disabled v-model="form.edit.workNumber"/>
+      </el-form-item>
+      <el-form-item label="姓名">
+        <el-input v-model="form.edit.name"/>
+      </el-form-item>
+      <el-form-item required label="岗位">
+        <el-select v-model="form.edit.post" value-key="id" filterable clearable placeholder="Select">
+          <el-option
+            v-for="item in postData"
+            :key="item.id"
+            :label="item.title"
+            :value="item"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item required label="所属线路">
+        <el-select v-model="form.edit.line" value-key="id" filterable clearable placeholder="Select">
+          <el-option
+            v-for="item in lineData"
+            :key="item.id"
+            :label="item.title"
+            :value="item"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item required label="部门">
+        <el-select v-model="form.edit.department" value-key="id" filterable clearable placeholder="Select">
+          <el-option
+            v-for="item in departmentData"
+            :key="item.id"
+            :label="item.title"
+            :value="item"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit().update()">更新</el-button>
+        <el-button @click="visible.edit=false">取消</el-button>
+      </el-form-item>
+    </el-form>
+  </el-dialog>
 </template>
 
 <style scoped>
