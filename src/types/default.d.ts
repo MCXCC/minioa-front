@@ -33,3 +33,10 @@ export type userItem = {
   createTime: Date,
   updateTime: Date,
 }
+
+export type userinfoItem={
+  workNumber: string,
+  name: string,
+  avatarUrl: string,
+  token:string
+}

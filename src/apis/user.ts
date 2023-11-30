@@ -4,7 +4,7 @@ import { defaultAPI } from '@/apis/default'
 
 export const loginAPI = ({ workNumber, password }: { workNumber: string, password: string }) => {
   return http<string>({
-    url: '/login',
+    url: '/user/login',
     method: 'POST',
     data: {
       workNumber,

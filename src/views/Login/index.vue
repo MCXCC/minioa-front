@@ -1,10 +1,17 @@
 <script setup lang="ts">
-import { loginAPI } from '@/apis/user'
+import { reactive } from 'vue'
+import { useUserStore } from '@/stores/userStore'
+import router from '@/router'
 
+const userStore = useUserStore()
+
+const loginForm = reactive({ workNumber: '', password: '' })
 const login = async () => {
   console.log('登录请求')
-  const res = await loginAPI({ workNumber: 'D00001', password: '12345678' })
-  console.dir(res.message)
+  await userStore.getUserInfo(loginForm)
+  if (userStore.userInfo.token !== '') {
+    router.go(-1)
+  }
 }
 </script>
 
@@ -29,10 +36,10 @@ const login = async () => {
   <div class="form-box">
     <div class="tit">login</div>
     <label>
-      <input id="wordNumber" type="text" name="work_number" placeholder="工号" required>
+      <input v-model="loginForm.workNumber" id="wordNumber" type="text" placeholder="工号" required>
     </label>
     <label>
-      <input id="password" type="password" name="password" placeholder="密码" required>
+      <input v-model="loginForm.password" id="password" type="password" placeholder="密码" required>
     </label>
     <button @click="login()" id="button" value="button" type="button">登录</button>
     <span>初始密码为12345678</span>

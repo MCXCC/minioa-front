@@ -1,13 +1,24 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import router from '@/router'
+import { useUserStore } from '@/stores/userStore'
 
+const userStore = useUserStore()
 const activeIndex = ref('1')
 // 是否登录
 const isLogin = ref(false)
 const handleSelect = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }
+
+const signOut = () => {
+  userStore.clearUserinfo()
+  isLogin.value = !!userStore.userInfo.token
+}
+
+onMounted(() => {
+  isLogin.value = !!userStore.userInfo.token
+})
 </script>
 
 <template>
@@ -46,12 +57,13 @@ const handleSelect = (key: string, keyPath: string[]) => {
     <!--    间隔-->
     <div style="flex-grow: 1"/>
     <div class="user">
-      <el-avatar
-        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+      <el-avatar v-if="isLogin"
+        :src="userStore.userInfo.avatarUrl?userStore.userInfo.avatarUrl:'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'"
       />
-      <span>你好! user</span>
+      <span v-if="isLogin">你好! {{ userStore.userInfo.workNumber }} {{ userStore.userInfo.name }}</span>
+      <span v-else>请先登录</span>
       <div class="button">
-        <el-button v-if="isLogin" type="danger" round>退出</el-button>
+        <el-button v-if="isLogin" type="danger" round @click="signOut()">退出登录</el-button>
         <el-button v-else type="primary" round>
           <RouterLink to="/login">登录</RouterLink>
         </el-button>
